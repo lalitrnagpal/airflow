@@ -6,17 +6,18 @@ from airflow.operators.python import PythonOperator
 
 from datetime import datetime
 import json
+from pandas import json_normalize
 
 default_args = {
     'start_date': datetime(2020, 1, 1)
 }
 
-def _processing_user():
-    users = ti.xcom_pull(tasks_id=['extracting_user'])
+def _processing_user(ti):
+    users = ti.xcom_pull(task_ids=['extracting_user'])
     if not len(users) or 'results' not in users[0]:
         raise ValueError('User is empty')
     user = users[0]['results'][0]
-    processed_user = ({
+    processed_user = json_normalize({
         'firstname': user['name']['first'],
         'lastname': user['name']['last'],
         'country': user['location']['country'],
@@ -58,11 +59,11 @@ with DAG('user_processing', schedule_interval='@daily',
             http_conn_id='user_api',
             endpoint='api/',
             method='GET',
-            response_filter=lambda response: json.loads(response.text),
+            response_filter=lambda response: json.loads(response.text),                    
             log_response=True
         )
 
         processing_user = PythonOperator(
-            task_id='process_user',
+            task_id='processing_user',
             python_callable=_processing_user
         )
