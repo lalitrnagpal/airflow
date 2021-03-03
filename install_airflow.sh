@@ -51,6 +51,8 @@ sudo pip install pysqlite3
 
 sudo pip install apache-airflow-providers-http
 
+sudo apt install postgresql -y
+
 sudo apt install sqlite3 -y
 
 sqlite3
