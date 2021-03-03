@@ -45,3 +45,21 @@ cp user_processing.py ./user_processing.py /home/lalitgcp8/airflow/dags
 
 cd /home/lalitgcp8/airflow/dags
 
+sudo pip install apache-airflow-providers-sqlite
+
+sudo pip install pysqlite3
+
+sudo pip install apache-airflow-providers-http
+
+sudo apt install sqlite3 -y
+
+sqlite3
+
+.open /home/lalitgcp8/airflow/airflow.db
+
+drop table if exists users;
+
+.exit
+
+
+
